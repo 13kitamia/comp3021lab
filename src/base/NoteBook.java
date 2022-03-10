@@ -1,5 +1,8 @@
 package base;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 public class NoteBook {
 	private ArrayList<Folder> folders;
@@ -10,6 +13,12 @@ public class NoteBook {
 
 	public boolean createTextNote(String folderName, String title){
 		TextNote note = new TextNote(title);
+
+		return insertNote(folderName, note);
+	}
+
+	public boolean createTextNote(String folderName, String title, String content){
+		TextNote note = new TextNote(title, content);
 
 		return insertNote(folderName, note);
 	}
@@ -41,5 +50,21 @@ public class NoteBook {
 		folders.add(new Folder(folderName));
 		folders.get(folders.size() - 1).addNote(note);
 		return true;
+	}
+
+	public void sortFolders(){
+		for(int i = 0; i < folders.size(); ++i){
+			folders.get(i).sortNotes();
+		}
+		Collections.sort(folders);
+	}
+
+	public List<Note> searchNotes(String keywords){
+		List<Note> results = new ArrayList<Note>();
+		for (int i = 0; i < folders.size(); ++i){
+			results.addAll(folders.get(i).searchNotes(keywords));
+		}
+
+		return new ArrayList<Note>(new HashSet<Note>(results));
 	}
 }
