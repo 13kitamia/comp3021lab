@@ -3,12 +3,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.io.*;
 
-public class NoteBook {
+public class NoteBook implements Serializable{
 	private ArrayList<Folder> folders;
 
 	public NoteBook(){
 		this.folders = new ArrayList<Folder>();
+	}
+
+	public NoteBook(String file){
+		try{
+			FileInputStream fis = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(fis);
+			this.folders = (ArrayList)in.readObject();
+			in.close();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public boolean createTextNote(String folderName, String title){
@@ -66,5 +78,18 @@ public class NoteBook {
 		}
 
 		return new ArrayList<Note>(new HashSet<Note>(results));
+	}
+
+	public boolean save(String file){
+		try{
+			FileOutputStream fos = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(fos);
+			out.writeObject(this.folders);
+			out.close();
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }
