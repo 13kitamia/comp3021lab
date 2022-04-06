@@ -77,6 +77,8 @@ public class Folder implements Comparable<Folder>, Serializable{
 
 			for(int j = 0; j < notes.size(); ++j){
 				note = notes.get(j);
+				if(subresult.contains(note))
+					continue;
 				if(note.getTitle().toLowerCase().contains(conditions[i]))
 					subresult.add(note);
 				else if(note.getClass().getName().equals("base.TextNote")){
